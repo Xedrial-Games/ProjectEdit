@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="635d84ae-5c34-43b8-9345-1d2745c25a2d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.PROJECT-E/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.PROJECT-E/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.PROJECT-E/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Eye.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Eye.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/EntityPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/EntityPrefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Editor/Scripts/LevelEdtiorInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Editor/Scripts/LevelEdtiorInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Editor/Scripts/ScriptEngineInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Editor/Scripts/ScriptEngineInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Packages/ProjectEPackages.asmdef" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Packages/ProjectEPackages.asmdef.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/Cell.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/Cell.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/EditorCamera.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/EditorCamera.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/EntitiesSystem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/EntitiesSystem.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/EntityCreator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/EntityCreator.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/GridGFX.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/GridGFX.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/LevelEditor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/LevelEditor.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/LevelLoader.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/LevelLoader.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/ScriptEngine.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/ScriptEngine.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/SelectCell.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/SelectCell.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/Tilemap.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/Tilemap/TileCreator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/Tilemap/TileCreator.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/UIManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/LevelEditor/Scripts/UIManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/ProjectE.asmdef" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/ProjectE.asmdef.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Database.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Database.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue/Dialogue.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue/Dialogue.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue/DialogueManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue/DialogueManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue/DialogueTrigger.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Dialogue/DialogueTrigger.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/EditorLevelMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/EditorLevelMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/EditorMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/EditorMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/Enemy.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/Enemy.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/EnemyAI.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/EnemyAI.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/EnemyAttack.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/EnemyAttack.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/FollowBehaviour.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/FollowBehaviour.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/Projectile.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Enemy/Projectile.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/GameManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/GameManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem/InputActions.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem/InputActions.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem/InputActions.inputactions" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem/InputActions.inputactions.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem/InputSystem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/InputSystem/InputSystem.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Level.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Level.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/LevelCell.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/LevelCell.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/LevelManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/LevelManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/LevelMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/LevelMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/MenuManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/MenuManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/OnlineLevelCell.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/OnlineLevelCell.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/OnlineLevelMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/OnlineLevelMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/OnlineMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/OnlineMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerCombat.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerCombat.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerController.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerMotor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerMotor.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerReference.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Player/PlayerReference.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/SavedLevelsMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/SavedLevelsMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Serialization.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Serialization.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Singelton.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/Singelton.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/UI.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/UI/PauseMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Runtime/Scripts/UI/PauseMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Renderer/Shaders/GlowUnlit.shadergraph" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Renderer/Shaders/GlowUnlit.shadergraph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Editor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Editor.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2021.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2021.dwlt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/LevelsEditor/UI/Cell.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/LevelMenu.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.entities@0.51.1-preview.21/Unity.Entities/EntityManager.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2DasUcRpV3uMf8W9G7OwATgNAI1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;rider.run.widget.enabled.cache&quot;: &quot;false&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$USER_HOME$/UnityEditors/2021.3.8f1/Editor/Unity" />
+      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath $PROJECT_DIR$ -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="635d84ae-5c34-43b8-9345-1d2745c25a2d" name="Changes" comment="" />
+      <created>1660948550243</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1660948550243</updated>
+      <workItem from="1660948568744" duration="1679000" />
+      <workItem from="1661038811593" duration="1940000" />
+      <workItem from="1661055953164" duration="6707000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

@@ -1,0 +1,17 @@
+{
+    "name": "ProjectEditPackages",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5661c44a7b046cd4cb4f6777a441f81d",
+        "GUID:50afb09a3d1accb4793d92e395d34b60"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

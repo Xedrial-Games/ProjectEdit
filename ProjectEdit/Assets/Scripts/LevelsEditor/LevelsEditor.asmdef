@@ -1,0 +1,20 @@
+{
+    "name": "LevelsEditor",
+    "rootNamespace": "ProjectEdit",
+    "references": [
+        "GUID:911b7291619535a45ab50996ebaa82f9",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:5661c44a7b046cd4cb4f6777a441f81d",
+        "GUID:457f2dc8efabc2c498abb25201c381e5",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

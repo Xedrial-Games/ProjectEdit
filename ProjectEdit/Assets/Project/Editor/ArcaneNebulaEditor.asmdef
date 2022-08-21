@@ -1,0 +1,18 @@
+{
+    "name": "ArcaneNebulaEditor",
+    "rootNamespace": "ArcaneNebulaEditor",
+    "references": [
+        "GUID:911b7291619535a45ab50996ebaa82f9"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
