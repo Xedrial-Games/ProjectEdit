@@ -21,12 +21,6 @@ namespace ProjectEdit.UI
             m_EditorMenu = EditorMenu.Instance.gameObject;
         }
 
-        public void BindData(LevelData levelData)
-        {
-            m_IDText.text = $"ID: {levelData.ID}";
-            m_NameText.text = levelData.Name;
-        }
-
         public void BindData(Level levelData)
         {
             m_Level = levelData;

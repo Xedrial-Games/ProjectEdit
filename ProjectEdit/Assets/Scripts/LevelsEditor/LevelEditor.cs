@@ -1,14 +1,21 @@
-using TMPro;
-using Unity.Plastic.Newtonsoft.Json.Serialization;
+using System;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+using Unity.Mathematics;
+using Unity.Transforms;
+
+using TMPro;
+
+using ProjectEdit.Entities;
 using ProjectEdit.Tiles;
 
 namespace ProjectEdit.LevelsEditor
 {
     public enum EditorState
     {
-        Brush, Delete, Edit
+        None, Brush, Delete, Edit
     }
 
     [DefaultExecutionOrder(-1)]
@@ -27,20 +34,23 @@ namespace ProjectEdit.LevelsEditor
         {
             get
             {
-                Vector3 worldPos = m_MainCamera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 worldPos = m_Camera.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int pos = m_Grid.WorldToCell(worldPos);
                 pos.z = 0;
                 return pos;
             }
         }
 
-        private EditorState m_EditorState = EditorState.Brush;
+        private Vector3 WorldCellPosition => m_Grid.GetCellCenterWorld(CellPosition);
+
+        private EditorState m_EditorState = EditorState.None;
         private bool m_IsLPressing;
         private bool m_IsAlt;
 
-        private Camera m_MainCamera;
+        private Camera m_Camera;
         private Grid m_Grid;
         private TileCreator m_TileCreator;
+        private EntitiesManager m_EntitiesManager;
 
         private void Awake()
         {
@@ -53,7 +63,20 @@ namespace ProjectEdit.LevelsEditor
             InputSystem.Editor.Enable();
 
             // Left Mouse Button
-            InputSystem.Editor.LMB.performed += _ => m_IsLPressing = true;
+            InputSystem.Editor.LMB.performed += _ =>
+            {
+                m_IsLPressing = true;
+
+                if (m_EditorState != EditorState.None)
+                    return;
+                
+                float3 from = m_Camera.ScreenToWorldPoint(Input.mousePosition);
+                const float rayDistance = 100f;
+                float3 to = new(from.x, from.y, from.z + rayDistance);
+                Entity hitEntity = Physics.RayCast(from, to);
+
+                print(hitEntity);
+            };
             InputSystem.Editor.LMB.canceled += _ => m_IsLPressing = false;
 
             // Alt Key
@@ -64,12 +87,19 @@ namespace ProjectEdit.LevelsEditor
             InputSystem.Editor.Edit.performed += _ =>
             {
                 if (m_EditorState == EditorState.Edit)
-                    return;
+                {
+                    OnEditEnd?.Invoke();
+                    
+                    m_EditorState = EditorState.None;
+                    m_ToolText.text = string.Empty;
+                }
+                else
+                {
+                    OnEditStart?.Invoke();
 
-                OnEditStart?.Invoke();
-
-                m_EditorState = EditorState.Edit;
-                m_ToolText.text = "Edit";
+                    m_EditorState = EditorState.Edit;
+                    m_ToolText.text = "Edit";
+                }
 
                 m_TileCreator.ClearSelection();
             };
@@ -80,10 +110,20 @@ namespace ProjectEdit.LevelsEditor
                 switch (m_EditorState)
                 {
                     case EditorState.Brush:
+                        m_EditorState = EditorState.None;
+                        m_ToolText.text = string.Empty;
+                        
+                        m_TileCreator.ClearSelection();
                         return;
                     case EditorState.Edit:
                         OnEditEnd?.Invoke();
                         break;
+                    case EditorState.None:
+                        break;
+                    case EditorState.Delete:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 m_EditorState = EditorState.Brush;
@@ -98,6 +138,10 @@ namespace ProjectEdit.LevelsEditor
                 switch (m_EditorState)
                 {
                     case EditorState.Delete:
+                        m_EditorState = EditorState.None;
+                        m_ToolText.text = string.Empty;
+                        
+                        m_TileCreator.ClearSelection();
                         return;
                     case EditorState.Edit:
                         OnEditEnd?.Invoke();
@@ -109,17 +153,17 @@ namespace ProjectEdit.LevelsEditor
 
                 m_TileCreator.ClearSelection();
             };
+            
+            m_Camera = Camera.main;
+
+            m_TileCreator = GetComponent<TileCreator>();
+            m_EntitiesManager = GetComponent<EntitiesManager>();
+            m_Grid = GetComponentInChildren<Grid>();
         }
 
         private void Start()
         {
             Debug.Assert(m_ToolText, "Tool text hasn't been assigned", gameObject);
-
-            m_MainCamera = Camera.main;
-
-            m_TileCreator = GetComponent<TileCreator>();
-            m_Grid = GetComponentInChildren<Grid>();
-
             //foreach (string path in Directory.GetFiles($"{Path}/Textures"))
             //{
             //    FileInfo fileInfo = new(path);
@@ -142,10 +186,10 @@ namespace ProjectEdit.LevelsEditor
 
         private void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (EventSystem.current.IsPointerOverGameObject() || m_IsAlt)
                 return;
 
-            if (m_IsLPressing && !m_IsAlt)
+            if (m_IsLPressing)
             {
                 switch (m_EditorState)
                 {
@@ -159,13 +203,12 @@ namespace ProjectEdit.LevelsEditor
                     case EditorState.Edit:
                         m_TileCreator.SelectTile(CellPosition);
                         break;
+                    case EditorState.None:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                SelectedTile = 1;
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                SelectedTile = 2;
         }
     }
 }

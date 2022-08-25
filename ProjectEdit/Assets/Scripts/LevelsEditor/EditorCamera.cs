@@ -4,7 +4,7 @@ namespace ProjectEdit.LevelsEditor
 {
     public class EditorCamera : MonoBehaviour
     {
-		private Vector2 MousePosition => InputSystem.Editor.MousePosition.ReadValue<Vector2>();
+		private static Vector2 MousePosition => InputSystem.Editor.MousePosition.ReadValue<Vector2>();
 
 		private Plane m_Plane = new(Vector3.back, Vector3.zero);
 
@@ -57,7 +57,6 @@ namespace ProjectEdit.LevelsEditor
                 if (m_Plane.Raycast(ray, out float entry))
                 {
 					m_DragCurrentPosition = ray.GetPoint(entry);
-
 					transform.position += m_DragStartPosition - m_DragCurrentPosition;
                 }
             }
@@ -68,8 +67,10 @@ namespace ProjectEdit.LevelsEditor
 
 		private void MouseScroll(float delta)
         {
-			m_Camera.orthographicSize -= delta;
-			m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize, 1.0f, 12.0f);
+	        float orthographicSize = m_Camera.orthographicSize;
+	        orthographicSize -= delta;
+	        m_Camera.orthographicSize = orthographicSize;
+	        m_Camera.orthographicSize = Mathf.Clamp(orthographicSize, 1.0f, 12.0f);
 		}
     }
 }

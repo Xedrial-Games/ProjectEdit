@@ -33,7 +33,7 @@ namespace ProjectEdit.UI
         public void DeleteLevel()
         {
             m_Serializer.DeleteLevel(m_GameManager.CurrentLevel);
-            GameManager.Instance.SetCurrentLevel(Level.Empty);
+            GameManager.Instance.SetCurrentLevel(Level.Null);
 
             m_EditorMenu.gameObject.SetActive(true);
             m_EditorMenu.ReloadData();

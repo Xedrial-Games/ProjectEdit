@@ -173,7 +173,7 @@ namespace ProjectEdit
         public static Level ExtractLevel(string levelData)
         {
             if (levelData == "null")
-                return Level.Empty;
+                return Level.Null;
 
             Level level = new();
 

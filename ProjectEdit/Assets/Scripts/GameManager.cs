@@ -21,8 +21,8 @@ namespace ProjectEdit
 
             DontDestroyOnLoad(this);
 
-            m_Serializer = new Serializer(Serializer.LevelsPath);
-            m_OnlineSerializer = new Serializer(Serializer.OnlineLevelsPath);
+            m_Serializer = new(Serializer.LevelsPath);
+            m_OnlineSerializer = new(Serializer.OnlineLevelsPath);
 
             InputSystem.Init();
         }
