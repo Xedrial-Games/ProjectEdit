@@ -8,26 +8,29 @@ namespace ProjectEdit
         {
             get
             {
-                if (s_Instance == null)
+                if (s_Instance != null)
+                    return s_Instance;
+                
+                var gm = GameObject.FindGameObjectWithTag("GameController");
+                if (gm)
+                    s_Instance = gm.AddComponent<T>();
+                else
                 {
-                    GameObject gm = GameObject.FindGameObjectWithTag("GameController");
-                    if (gm)
-                        s_Instance = gm.AddComponent<T>();
-                    else
+                    gm = new GameObject("GameManager")
                     {
-                        gm = new GameObject("GameManager");
-                        gm.tag = "GameController";
-                        s_Instance = gm.AddComponent<T>();
-                    }
+                        tag = "GameController"
+                    };
+                    
+                    s_Instance = gm.AddComponent<T>();
                 }
 
                 return s_Instance;
             }
         }
 
-        protected static T s_Instance;
+        private static T s_Instance;
 
-        public virtual void Awake()
+        protected virtual void Awake()
         {
             if (!s_Instance)
                 s_Instance = (T)this;

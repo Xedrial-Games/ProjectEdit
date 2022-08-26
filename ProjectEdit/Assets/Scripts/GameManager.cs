@@ -15,14 +15,14 @@ namespace ProjectEdit
         private Serializer m_Serializer;
         private Serializer m_OnlineSerializer;
 
-        public override void Awake()
+        protected override void Awake()
         {
             base.Awake();
 
             DontDestroyOnLoad(this);
 
-            m_Serializer = new(Serializer.LevelsPath);
-            m_OnlineSerializer = new(Serializer.OnlineLevelsPath);
+            m_Serializer = new Serializer(Serializer.LevelsPath);
+            m_OnlineSerializer = new Serializer(Serializer.OnlineLevelsPath);
 
             InputSystem.Init();
         }

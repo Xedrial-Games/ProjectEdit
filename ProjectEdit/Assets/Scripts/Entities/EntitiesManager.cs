@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-
+using ProjectEdit.Components;
+using ProjectEdit.Scripting;
 using UnityEngine;
 
 using Unity.Entities;
-using Unity.Rendering;
-using Unity.Mathematics;
 using UEntity = Unity.Entities.Entity;
-
-using ProjectEdit.Components;
 
 namespace ProjectEdit.Entities
 {
@@ -31,7 +28,7 @@ namespace ProjectEdit.Entities
             // Get References
             m_World = World.DefaultGameObjectInjectionWorld;
             m_EntityManager = m_World.EntityManager;
-            m_BlobAssetStore = new();
+            m_BlobAssetStore = new BlobAssetStore();
 
             // Ready the entities list
             m_EntityInstances.Clear();
@@ -41,10 +38,9 @@ namespace ProjectEdit.Entities
             m_EntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy
                 (m_EntityGameObjectPrefab, settings);
 
-            // Disable receive shadows (maybe for performance but I am not sure if it affects)
-            var renderMesh = m_EntityManager.GetSharedComponentData<RenderMesh>(m_EntityPrefab);
-            renderMesh.receiveShadows = false;
-            m_EntityManager.SetSharedComponentData(m_EntityPrefab, renderMesh);
+            Entity entity = CreateEntity();
+            if (entity.AddComponent<ScriptComponent>())
+                entity.SetComponentData(new ScriptComponent{ Name = "Test.lua" });
         }
 
         /// <summary>
@@ -56,11 +52,6 @@ namespace ProjectEdit.Entities
             Entity entity = new(m_EntityManager.Instantiate(m_EntityPrefab),
                 m_EntityManager);
             m_EntityInstances.Add(entity);
-
-            entity.SetComponentData(new MainTexMaterialProperty
-            {
-                Value = new float2x4(1f)
-            });
 
             return entity;
         }
@@ -86,6 +77,40 @@ namespace ProjectEdit.Entities
         private void OnDestroy()
         {
             m_BlobAssetStore.Dispose();
+        }
+    }
+
+    public partial class ScriptSystem : SystemBase
+    {
+        protected override void OnCreate()
+        {
+            ScriptEngine.LoadLua();
+        }
+
+        protected override void OnStartRunning()
+        {
+            var scripts = ScriptEngine.Scripts;
+
+            Entities.ForEach((ref ScriptComponent scriptComponent) =>
+            {
+                if (!scripts.TryGetValue(scriptComponent.Name.ToString(), out Script script))
+                    return;
+
+                script.StartFunction?.Call();
+            }).WithoutBurst().Run();
+        }
+
+        protected override void OnUpdate()
+        {
+            var scripts = ScriptEngine.Scripts;
+
+            Entities.ForEach((ref ScriptComponent scriptComponent) =>
+            {
+                if (!scripts.TryGetValue(scriptComponent.Name.ToString(), out Script script))
+                    return;
+
+                script.UpdateFunction?.Call();
+            }).WithoutBurst().Run();
         }
     }
 }

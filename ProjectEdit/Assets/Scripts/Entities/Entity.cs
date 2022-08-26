@@ -12,6 +12,13 @@ namespace ProjectEdit.Entities
         }
 
         /// <summary>
+        /// Adds a component to the entity
+        /// </summary>
+        /// <typeparam name="T">the component type</typeparam>
+        /// <returns>Whether the add was successful of not</returns>
+        public bool AddComponent<T>() => m_EntityManager.AddComponent<T>(m_EntityHandle);
+
+        /// <summary>
         /// Gets the specified component data
         /// </summary>
         /// <typeparam name="T">the component type</typeparam>

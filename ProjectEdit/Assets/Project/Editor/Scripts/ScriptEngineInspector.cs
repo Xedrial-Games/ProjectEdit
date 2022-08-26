@@ -13,12 +13,11 @@ namespace ProjectE_Editor
 
             EditorGUILayout.BeginHorizontal();
 
-            ScriptEngine engine = (ScriptEngine)target;
             if (GUILayout.Button("Load Lua"))
-                engine.LoadLua();
+                ScriptEngine.LoadLua();
 
             if (GUILayout.Button("Execute Lua"))
-                engine.ExecuteLua();            
+                ScriptEngine.ExecuteLua();            
 
             EditorGUILayout.EndHorizontal();
         }

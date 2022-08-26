@@ -1,18 +1,30 @@
-using UnityEngine;
-using MoonSharp.Interpreter;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+
+using UnityEngine;
+
+using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
+using ProjectEdit.Components;
+using Unity.Burst;
+using MScript = MoonSharp.Interpreter.Script;
 
 namespace ProjectEdit.Scripting
 {
     public class ScriptEngine : MonoBehaviour
     {
-        private Script m_MinifyScript = new();
-        private DynValue m_Minify;
+        public static Dictionary<string, Script> Scripts => s_Scripts;
 
-        public void LoadLua()
+        private static readonly Dictionary<string, Script> s_Scripts = new();
+
+        private static MScript s_MinifyScript = new();
+        private static DynValue s_Minify;
+
+        public static void LoadLua()
         {
+            s_Scripts.Clear();
             DirectoryInfo directoryInfo = new($"{Application.dataPath}/LuaScripts");
 
             var scripts = directoryInfo.GetFiles()
@@ -20,19 +32,35 @@ namespace ProjectEdit.Scripting
                 .ToDictionary(scriptFile => scriptFile.Name,
                     scriptFile => File.ReadAllText(scriptFile.FullName));
 
-            Script.DefaultOptions.ScriptLoader = new UnityAssetsScriptLoader(scripts);
-            ((UnityAssetsScriptLoader)Script.DefaultOptions.ScriptLoader).ModulePaths
+            MScript.DefaultOptions.ScriptLoader = new UnityAssetsScriptLoader(scripts);
+            ((UnityAssetsScriptLoader)MScript.DefaultOptions.ScriptLoader).ModulePaths
                 = new[] { $"{directoryInfo.FullName}/?", $"{directoryInfo.FullName}/?.lua" };
 
-            m_MinifyScript = new();
-            m_MinifyScript.DoFile("minify.lua");
+            foreach (var pair in scripts)
+            {
+                var script = new MScript
+                {
+                    Globals =
+                    {
+                        ["Log"] = (Action<object>)Log
+                    }
+                };
+                
+                script.DoFile(pair.Key);
+                s_Scripts.Add(pair.Key, new Script(script));
+            }
+            
+            s_MinifyScript = new MScript();
+            s_MinifyScript.DoFile("minify.lua");
 
-            m_Minify = m_MinifyScript.Globals.Get("MinifyCode");
+            s_Minify = s_MinifyScript.Globals.Get("MinifyCode");
         }
 
-        public void ExecuteLua()
+        public static void ExecuteLua()
         {
-            print(m_MinifyScript.Call(m_Minify, "a     =      5  +2  ;"));
+            print(s_Scripts["Test.lua"].StartFunction.Call().Number);
         }
+
+        private static void Log(object message) => Debug.Log(message);
     }
 }

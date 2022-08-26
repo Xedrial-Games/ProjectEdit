@@ -1,12 +1,10 @@
 using Unity.Entities;
-using Unity.Rendering;
-using Unity.Mathematics;
+using Unity.Collections;
 
 namespace ProjectEdit.Components
 {
-    [MaterialProperty("_MainTex", MaterialPropertyFormat.Float2x4)]
-    public struct MainTexMaterialProperty : IComponentData
+    public struct ScriptComponent : IComponentData
     {
-        public float2x4 Value;
+        public FixedString32Bytes Name;
     }
 }
