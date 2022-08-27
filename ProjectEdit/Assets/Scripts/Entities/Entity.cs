@@ -25,6 +25,14 @@ namespace ProjectEdit.Entities
         /// <returns>the component data specified</returns>
         public T GetComponentData<T>() where T : struct, IComponentData
             => m_EntityManager.GetComponentData<T>(m_EntityHandle);
+        
+        /// <summary>
+        /// Gets the specified component data
+        /// </summary>
+        /// <typeparam name="T">the component type</typeparam>
+        /// <returns>the component data specified</returns>
+        public T GetComponentObject<T>()
+            => m_EntityManager.GetComponentObject<T>(m_EntityHandle);
 
         /// <summary>
         /// Gets the specified component data

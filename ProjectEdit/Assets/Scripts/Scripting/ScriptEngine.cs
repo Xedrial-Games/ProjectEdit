@@ -7,8 +7,10 @@ using UnityEngine;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
-using ProjectEdit.Components;
-using Unity.Burst;
+using ProjectEdit.Entities;
+using Unity.Entities.UniversalDelegates;
+using Unity.Mathematics;
+using Unity.Transforms;
 using MScript = MoonSharp.Interpreter.Script;
 
 namespace ProjectEdit.Scripting
@@ -36,19 +38,8 @@ namespace ProjectEdit.Scripting
             ((UnityAssetsScriptLoader)MScript.DefaultOptions.ScriptLoader).ModulePaths
                 = new[] { $"{directoryInfo.FullName}/?", $"{directoryInfo.FullName}/?.lua" };
 
-            foreach (var pair in scripts)
-            {
-                var script = new MScript
-                {
-                    Globals =
-                    {
-                        ["Log"] = (Action<object>)Log
-                    }
-                };
-                
-                script.DoFile(pair.Key);
-                s_Scripts.Add(pair.Key, new Script(script));
-            }
+            RegisterTypes();
+            RegisterValues(scripts.Keys);
             
             s_MinifyScript = new MScript();
             s_MinifyScript.DoFile("minify.lua");
@@ -62,5 +53,60 @@ namespace ProjectEdit.Scripting
         }
 
         private static void Log(object message) => Debug.Log(message);
+
+        private static void RegisterTypes()
+        {
+            UserData.RegisterType<Transform>();
+        }
+
+        private static void RegisterValues(IEnumerable<string> scripts)
+        {
+            foreach (string name in scripts)
+            {
+                var script = new MScript
+                {
+                    Globals =
+                    {
+                        ["Log"] = (Action<object>)Log
+                    }
+                };
+                
+                script.DoFile(name);
+                s_Scripts.Add(name, new Script(script));
+            }
+        }
+    }
+
+    public class Transform
+    {
+        [MoonSharpHidden]
+        public Transform(Entity entity) => m_Entity = entity;
+
+        public Table position
+        {
+            get
+            {
+                float3 value = m_Entity.GetComponentData<Translation>().Value;
+                var table = new Table(m_Entity.GetComponentData<Script>().ScriptHandle)
+                {
+                    ["x"] = value.x,
+                    ["y"] = value.y,
+                    ["z"] = value.z
+                };
+
+                return table;
+            }
+            set => m_Entity.SetComponentData(new Translation
+            {
+                Value = new float3
+                (
+                    (float)value["x"],
+                    (float)value["y"],
+                    (float)value["z"]
+                )
+            });
+        }
+        
+        private Entity m_Entity;
     }
 }

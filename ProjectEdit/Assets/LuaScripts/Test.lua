@@ -1,11 +1,8 @@
-value = 5;
+require("Vector3");
+
+local position = Vector3:new(10, 20, 30);
 
 function Start()
 	Log("Start!");
+	transform.position = position;
 end
-
-function Update()
-	value = value + 1;
-	Log(value);
-end
-

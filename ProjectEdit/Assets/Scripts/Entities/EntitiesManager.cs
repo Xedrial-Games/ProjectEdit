@@ -4,6 +4,7 @@ using ProjectEdit.Scripting;
 using UnityEngine;
 
 using Unity.Entities;
+using Transform = ProjectEdit.Scripting.Transform;
 using UEntity = Unity.Entities.Entity;
 
 namespace ProjectEdit.Entities
@@ -39,8 +40,8 @@ namespace ProjectEdit.Entities
                 (m_EntityGameObjectPrefab, settings);
 
             Entity entity = CreateEntity();
-            if (entity.AddComponent<ScriptComponent>())
-                entity.SetComponentData(new ScriptComponent{ Name = "Test.lua" });
+            if (entity.AddComponent<Script>()) ;
+            //entity.SetComponentData(new Script("Test.lua", entity));
         }
 
         /// <summary>
@@ -91,12 +92,9 @@ namespace ProjectEdit.Entities
         {
             var scripts = ScriptEngine.Scripts;
 
-            Entities.ForEach((ref ScriptComponent scriptComponent) =>
+            Entities.ForEach((UEntity entity) =>
             {
-                if (!scripts.TryGetValue(scriptComponent.Name.ToString(), out Script script))
-                    return;
-
-                script.StartFunction?.Call();
+                EntityManager.GetComponentObject<Script>(entity).StartFunction?.Call();
             }).WithoutBurst().Run();
         }
 
@@ -104,12 +102,9 @@ namespace ProjectEdit.Entities
         {
             var scripts = ScriptEngine.Scripts;
 
-            Entities.ForEach((ref ScriptComponent scriptComponent) =>
+            Entities.ForEach((UEntity entity) =>
             {
-                if (!scripts.TryGetValue(scriptComponent.Name.ToString(), out Script script))
-                    return;
-
-                script.UpdateFunction?.Call();
+                EntityManager.GetComponentObject<Script>(entity).UpdateFunction?.Call();
             }).WithoutBurst().Run();
         }
     }
