@@ -1,112 +1,123 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
 using UnityEngine;
+using Unity.Entities;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
-using ProjectEdit.Entities;
-using Unity.Entities.UniversalDelegates;
-using Unity.Mathematics;
-using Unity.Transforms;
 using MScript = MoonSharp.Interpreter.Script;
+
+using ProjectEdit.Components;
+using ProjectEdit.Entities;
+using Unity.Collections;
 
 namespace ProjectEdit.Scripting
 {
-    public class ScriptEngine : MonoBehaviour
+    public partial class ScriptsSystem : SystemBase
     {
-        public static Dictionary<string, Script> Scripts => s_Scripts;
+        public static Dictionary<Entity, Script> Scripts { get; } = new();
+        private static ref EntityCommandBuffer CommandBuffer => ref EntitiesManager.CommandBuffer;
 
-        private static readonly Dictionary<string, Script> s_Scripts = new();
-
-        private static MScript s_MinifyScript = new();
-        private static DynValue s_Minify;
-
-        public static void LoadLua()
+        protected override void OnCreate()
         {
-            s_Scripts.Clear();
-            DirectoryInfo directoryInfo = new($"{Application.dataPath}/LuaScripts");
+            Scripts.Clear();
+            DirectoryInfo modulesDi = new($"{Application.streamingAssetsPath}/LuaScripts/");
+            DirectoryInfo directoryInfo = new($"{Application.streamingAssetsPath}/LuaScripts/");
 
-            var scripts = directoryInfo.GetFiles()
-                .Where(scriptFile => scriptFile.Extension == ".lua")
+            var scripts = directoryInfo.GetFiles("*.lua", SearchOption.AllDirectories)
                 .ToDictionary(scriptFile => scriptFile.Name,
                     scriptFile => File.ReadAllText(scriptFile.FullName));
 
-            MScript.DefaultOptions.ScriptLoader = new UnityAssetsScriptLoader(scripts);
-            ((UnityAssetsScriptLoader)MScript.DefaultOptions.ScriptLoader).ModulePaths
-                = new[] { $"{directoryInfo.FullName}/?", $"{directoryInfo.FullName}/?.lua" };
+            MScript.DefaultOptions.ScriptLoader = new UnityAssetsScriptLoader(scripts)
+            {
+                ModulePaths = new[]
+                {
+                    $"{modulesDi.FullName}/?", $"{modulesDi.FullName}/?.lua"
+                },
+                IgnoreLuaPathGlobal = true
+            };
+            MScript.DefaultOptions.DebugPrint = Debug.Log;
 
             RegisterTypes();
-            RegisterValues(scripts.Keys);
-            
-            s_MinifyScript = new MScript();
-            s_MinifyScript.DoFile("minify.lua");
-
-            s_Minify = s_MinifyScript.Globals.Get("MinifyCode");
         }
 
-        public static void ExecuteLua()
+        protected override void OnStartRunning()
         {
-            print(s_Scripts["Test.lua"].StartFunction.Call().Number);
+            CommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
+            var scripts = Scripts;
+
+            Entities.ForEach((Entity entity, ref ScriptComponent _) =>
+            {
+                if (!scripts.TryGetValue(entity, out Script script))
+                    return;
+                
+                script.StartFunction?.Call();
+
+                DynValue export = script.ScriptHandle.Globals.Get("export");
+                if (export.IsNil())
+                    return;
+
+                foreach (TablePair pair in export.Table.Pairs)
+                {
+                    Debug.Log($"{pair.Key}:{pair.Value}");
+                }
+                
+            }).WithoutBurst().Run();
+            
+            if (CommandBuffer.IsEmpty)
+            {
+                CommandBuffer.Dispose();
+                return;
+            }
+            
+            CommandBuffer.Playback(EntityManager);
+            CommandBuffer.Dispose();
         }
 
-        private static void Log(object message) => Debug.Log(message);
+        protected override void OnUpdate()
+        {
+            float ts = Time.DeltaTime;
+            CommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
+
+            Entities.ForEach((Entity entity, ref ScriptComponent _) =>
+            {
+                if (Scripts.TryGetValue(entity, out Script script))
+                    script.UpdateFunction?.Call(ts);
+            }).WithoutBurst().Run();
+
+            if (CommandBuffer.IsEmpty)
+            {
+                CommandBuffer.Dispose();
+                return;
+            }
+            
+            CommandBuffer.Playback(EntityManager);
+            CommandBuffer.Dispose();
+        }
+
+        public static void AddScript(Entity entity)
+        {
+            var script = new MScript
+            {
+                Globals =
+                {
+                    ["Input"] = typeof(Input),
+                    ["EntityHandle"] = entity,
+                    ["InternalCalls"] = UserData.CreateStatic<InternalCalls>()
+                }
+            };
+
+            script.DoFile(EntitiesManager.EntityManager.GetComponentData<ScriptComponent>(entity).Script.ToString());
+            Scripts.Add(entity, new Script(script, entity));
+        }
 
         private static void RegisterTypes()
         {
-            UserData.RegisterType<Transform>();
+            UserData.RegisterAssembly();
+            UserData.RegisterType<Entity>();
+            UserData.RegisterType<Input>();
         }
-
-        private static void RegisterValues(IEnumerable<string> scripts)
-        {
-            foreach (string name in scripts)
-            {
-                var script = new MScript
-                {
-                    Globals =
-                    {
-                        ["Log"] = (Action<object>)Log
-                    }
-                };
-                
-                script.DoFile(name);
-                s_Scripts.Add(name, new Script(script));
-            }
-        }
-    }
-
-    public class Transform
-    {
-        [MoonSharpHidden]
-        public Transform(Entity entity) => m_Entity = entity;
-
-        public Table position
-        {
-            get
-            {
-                float3 value = m_Entity.GetComponentData<Translation>().Value;
-                var table = new Table(m_Entity.GetComponentData<Script>().ScriptHandle)
-                {
-                    ["x"] = value.x,
-                    ["y"] = value.y,
-                    ["z"] = value.z
-                };
-
-                return table;
-            }
-            set => m_Entity.SetComponentData(new Translation
-            {
-                Value = new float3
-                (
-                    (float)value["x"],
-                    (float)value["y"],
-                    (float)value["z"]
-                )
-            });
-        }
-        
-        private Entity m_Entity;
     }
 }

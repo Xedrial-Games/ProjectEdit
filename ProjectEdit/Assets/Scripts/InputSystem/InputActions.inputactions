@@ -326,6 +326,17 @@
                 },
                 {
                     "name": "",
+                    "id": "5a505631-ad50-489f-879e-0e27d82baa2e",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8eaced15-0744-48b3-88d5-831e85f83c6d",
                     "path": "<Mouse>/position",
                     "interactions": "",

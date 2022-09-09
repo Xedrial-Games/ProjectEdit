@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using ProjectEdit.Components;
-using ProjectEdit.Scripting;
-using UnityEngine;
 
+using UnityEngine;
 using Unity.Entities;
-using Transform = ProjectEdit.Scripting.Transform;
-using UEntity = Unity.Entities.Entity;
+
+using ProjectEdit.Components;
+using Unity.Collections;
 
 namespace ProjectEdit.Entities
 {
@@ -14,45 +13,71 @@ namespace ProjectEdit.Entities
         // The entity prefab game object.
         [SerializeField] private GameObject m_EntityGameObjectPrefab;
 
-        private EntityManager m_EntityManager;
+        public static EntityManager EntityManager { get; private set; }
+        public static EntityCommandBuffer CommandBuffer;
         private World m_World;
         private BlobAssetStore m_BlobAssetStore;
 
         // A list of all the entities in the scene.
-        private readonly List<Entity> m_EntityInstances = new();
+        private static readonly List<Entity> s_Entities = new();
 
         // The entity prefab created from the game object.
-        private UEntity m_EntityPrefab;
+        private static Entity s_EntityPrefab;
 
         private void Awake()
         {
             // Get References
             m_World = World.DefaultGameObjectInjectionWorld;
-            m_EntityManager = m_World.EntityManager;
+            EntityManager = m_World.EntityManager;
             m_BlobAssetStore = new BlobAssetStore();
 
             // Ready the entities list
-            m_EntityInstances.Clear();
+            s_Entities.Clear();
             
             // Ready the Entity prefab
             GameObjectConversionSettings settings = GameObjectConversionSettings.FromWorld(m_World, m_BlobAssetStore);
-            m_EntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy
+            s_EntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy
                 (m_EntityGameObjectPrefab, settings);
 
-            Entity entity = CreateEntity();
-            if (entity.AddComponent<Script>()) ;
-            //entity.SetComponentData(new Script("Test.lua", entity));
+            /*Entity entity = CreateEntity();
+            EntityManager.AddComponent<ScriptComponent>(entity);
+            EntityManager.SetComponentData(entity, new ScriptComponent { Script = "MoveSquare.lua" });
+            
+            Scripting.ScriptsSystem.AddScript(entity);*/
         }
 
         /// <summary>
         /// Creates a new entity and adds it.
         /// </summary>
         /// <returns>The newly created entity</returns>
-        public Entity CreateEntity()
+        public static Entity CreateEntity()
         {
-            Entity entity = new(m_EntityManager.Instantiate(m_EntityPrefab),
-                m_EntityManager);
-            m_EntityInstances.Add(entity);
+            Entity entity = EntityManager.Instantiate(s_EntityPrefab);
+            s_Entities.Add(entity);
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Creates a new entity and adds it.
+        /// </summary>
+        /// <returns>The newly created entity</returns>
+        public static Entity ScheduleCreateEntity()
+        {
+            Entity entity = CommandBuffer.Instantiate(s_EntityPrefab);
+            s_Entities.Add(entity);
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Creates an empty entity and adds it.
+        /// </summary>
+        /// <returns>The newly created entity</returns>
+        public static Entity CreateEmptyEntity()
+        {
+            Entity entity = CommandBuffer.CreateEntity();
+            s_Entities.Add(entity);
 
             return entity;
         }
@@ -64,10 +89,10 @@ namespace ProjectEdit.Entities
         /// <returns>whether the operation was successful or not</returns>
         public bool DestroyEntity(Entity entity)
         {
-            if (m_EntityInstances.Contains(entity))
+            if (s_Entities.Contains(entity))
             {
-                m_EntityInstances.Remove(entity);
-                m_EntityManager.DestroyEntity(entity);
+                s_Entities.Remove(entity);
+                EntityManager.DestroyEntity(entity);
                 return true;
             }
             
@@ -78,34 +103,6 @@ namespace ProjectEdit.Entities
         private void OnDestroy()
         {
             m_BlobAssetStore.Dispose();
-        }
-    }
-
-    public partial class ScriptSystem : SystemBase
-    {
-        protected override void OnCreate()
-        {
-            ScriptEngine.LoadLua();
-        }
-
-        protected override void OnStartRunning()
-        {
-            var scripts = ScriptEngine.Scripts;
-
-            Entities.ForEach((UEntity entity) =>
-            {
-                EntityManager.GetComponentObject<Script>(entity).StartFunction?.Call();
-            }).WithoutBurst().Run();
-        }
-
-        protected override void OnUpdate()
-        {
-            var scripts = ScriptEngine.Scripts;
-
-            Entities.ForEach((UEntity entity) =>
-            {
-                EntityManager.GetComponentObject<Script>(entity).UpdateFunction?.Call();
-            }).WithoutBurst().Run();
         }
     }
 }

@@ -1,0 +1,18 @@
+{
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.workspace.library": [
+        "${3rd}/love2d/library"
+    ],
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.diagnostics.globals": [
+        "Input",
+        "transform",
+        "quat",
+        "vec3",
+        "entity",
+        "InternalCalls",
+        "export",
+        "EntityHandle",
+        "color"
+    ]
+}

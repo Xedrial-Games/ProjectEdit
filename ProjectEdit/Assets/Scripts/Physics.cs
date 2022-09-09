@@ -1,9 +1,7 @@
-using ProjectEdit.Entities;
 using Unity.Mathematics;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Physics.Systems;
-using Entity = ProjectEdit.Entities.Entity;
 
 namespace ProjectEdit
 {
@@ -12,7 +10,6 @@ namespace ProjectEdit
         public static Entity RayCast(float3 from, float3 to)
         {
             var buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
-            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
             RaycastInput raycastInput = new()
@@ -28,10 +25,9 @@ namespace ProjectEdit
             };
 
             if (!collisionWorld.CastRay(raycastInput, out RaycastHit raycastHit))
-                return new(Unity.Entities.Entity.Null, entityManager);
-            
-            Unity.Entities.Entity hitEntity = buildPhysicsWorld.PhysicsWorld.Bodies[raycastHit.RigidBodyIndex].Entity;
-            return new(hitEntity, entityManager);
+                return Entity.Null;
+
+            return buildPhysicsWorld.PhysicsWorld.Bodies[raycastHit.RigidBodyIndex].Entity;
         }
     }
 }

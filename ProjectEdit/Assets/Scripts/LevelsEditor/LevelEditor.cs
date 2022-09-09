@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 using Unity.Mathematics;
-using Unity.Transforms;
 
 using TMPro;
 
 using ProjectEdit.Entities;
 using ProjectEdit.Tiles;
+using Unity.Entities;
 
 namespace ProjectEdit.LevelsEditor
 {
@@ -41,11 +41,10 @@ namespace ProjectEdit.LevelsEditor
             }
         }
 
-        private Vector3 WorldCellPosition => m_Grid.GetCellCenterWorld(CellPosition);
-
         private EditorState m_EditorState = EditorState.None;
         private bool m_IsLPressing;
         private bool m_IsAlt;
+        private bool m_OverUI;
 
         private Camera m_Camera;
         private Grid m_Grid;
@@ -67,7 +66,7 @@ namespace ProjectEdit.LevelsEditor
             {
                 m_IsLPressing = true;
 
-                if (m_EditorState != EditorState.None)
+                if (m_EditorState != EditorState.None || m_IsAlt || m_OverUI)
                     return;
                 
                 float3 from = m_Camera.ScreenToWorldPoint(Input.mousePosition);
@@ -154,6 +153,9 @@ namespace ProjectEdit.LevelsEditor
                 m_TileCreator.ClearSelection();
             };
             
+            m_EditorState = EditorState.None;
+            m_ToolText.text = string.Empty;
+            
             m_Camera = Camera.main;
 
             m_TileCreator = GetComponent<TileCreator>();
@@ -186,7 +188,9 @@ namespace ProjectEdit.LevelsEditor
 
         private void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject() || m_IsAlt)
+            m_OverUI = EventSystem.current.IsPointerOverGameObject();
+            
+            if (m_OverUI || m_IsAlt)
                 return;
 
             if (m_IsLPressing)

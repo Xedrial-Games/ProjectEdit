@@ -1,0 +1,31 @@
+{
+    "Show": true,
+    "Dependencies": [],
+    "Components": [
+        {
+            "$type": "Unity.Build.Classic.ClassicBuildProfile, Unity.Build.Classic",
+            "$version": 1,
+            "Platform": "Android",
+            "Configuration": 1
+        },
+        {
+            "$type": "Unity.Build.Common.SceneList, Unity.Build",
+            "$version": 1,
+            "BuildCurrentScene": false,
+            "SceneInfos": [
+                {
+                    "Scene": "GlobalObjectId_V1-1-c5099f7b0e79a47448190fcb86ff323d-102900000-0",
+                    "AutoLoad": false
+                },
+                {
+                    "Scene": "GlobalObjectId_V1-1-3f5141460dfbe2e46b9e7a633d10a27a-102900000-0",
+                    "AutoLoad": false
+                },
+                {
+                    "Scene": "GlobalObjectId_V1-1-add8f2b043726184b863a423f5dd81ee-102900000-0",
+                    "AutoLoad": false
+                }
+            ]
+        }
+    ]
+}

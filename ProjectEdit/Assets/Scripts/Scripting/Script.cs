@@ -1,11 +1,13 @@
-using MoonSharp.Interpreter;
+using System;
+
 using Unity.Entities;
-using Entity = ProjectEdit.Entities.Entity;
+
+using MoonSharp.Interpreter;
 using MScript = MoonSharp.Interpreter.Script;
 
 namespace ProjectEdit.Scripting
 {
-    public struct Script : IComponentData
+    public class Script
     {
         public Closure StartFunction { get; }
         
@@ -13,7 +15,7 @@ namespace ProjectEdit.Scripting
         
         public readonly MScript ScriptHandle;
 
-        public Script(MScript scriptHandle)
+        public Script(MScript scriptHandle, Entity entity)
         {
             ScriptHandle = scriptHandle;
 
@@ -25,8 +27,6 @@ namespace ProjectEdit.Scripting
         {
             ScriptHandle = new MScript();
             ScriptHandle.DoFile(fileName);
-
-            ScriptHandle.Globals["transform"] = new Transform(entity);
 
             StartFunction = ScriptHandle.Globals.Get("Start").Function;
             UpdateFunction = ScriptHandle.Globals.Get("Update").Function;
