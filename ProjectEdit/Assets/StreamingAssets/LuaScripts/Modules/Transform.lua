@@ -9,6 +9,10 @@ function Transform.new(entity)
     return new(entity);
 end
 
+function Transform.ToString()
+    return "Transform";
+end
+
 function TransformMt.__index(obj, index)
     if (index == "position") then
         return vec3.new(InternalCalls.GetTranslation(obj.entity.entityHandle));

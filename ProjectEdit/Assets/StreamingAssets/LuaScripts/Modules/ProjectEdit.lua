@@ -7,7 +7,8 @@ require("Entity");
 require("Components");
 require("GlobalFunctions");
 require("Transform");
+require("SpriteRenderer");
 
 entity = Entity.new(EntityHandle);
 
-transform = Transform.new(entity);
+transform = entity:GetComponent(Transform);

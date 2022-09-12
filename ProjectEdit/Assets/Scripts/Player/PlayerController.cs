@@ -26,6 +26,10 @@ namespace ProjectEdit
             InputSystem.Player.Dash.performed += m_Motor.OnDash;
 
             InputSystem.Player.Attack.performed += m_Combat.SetAttack;
+
+            
+            
+            InputSystem.Player.Move.performed += _ => Debug.Log("BANANAS");
         }
 
         private void OnDestroy()

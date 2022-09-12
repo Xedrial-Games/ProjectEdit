@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-
+using ProjectEdit.Components;
 using UnityEngine;
 using Unity.Entities;
-
-using ProjectEdit.Components;
-using Unity.Collections;
 
 namespace ProjectEdit.Entities
 {
@@ -14,7 +11,6 @@ namespace ProjectEdit.Entities
         [SerializeField] private GameObject m_EntityGameObjectPrefab;
 
         public static EntityManager EntityManager { get; private set; }
-        public static EntityCommandBuffer CommandBuffer;
         private World m_World;
         private BlobAssetStore m_BlobAssetStore;
 
@@ -39,11 +35,11 @@ namespace ProjectEdit.Entities
             s_EntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy
                 (m_EntityGameObjectPrefab, settings);
 
-            /*Entity entity = CreateEntity();
+            Entity entity = CreateEntity();
             EntityManager.AddComponent<ScriptComponent>(entity);
             EntityManager.SetComponentData(entity, new ScriptComponent { Script = "MoveSquare.lua" });
             
-            Scripting.ScriptsSystem.AddScript(entity);*/
+            Scripting.ScriptsSystem.AddScript(entity);
         }
 
         /// <summary>
@@ -59,24 +55,12 @@ namespace ProjectEdit.Entities
         }
 
         /// <summary>
-        /// Creates a new entity and adds it.
-        /// </summary>
-        /// <returns>The newly created entity</returns>
-        public static Entity ScheduleCreateEntity()
-        {
-            Entity entity = CommandBuffer.Instantiate(s_EntityPrefab);
-            s_Entities.Add(entity);
-
-            return entity;
-        }
-
-        /// <summary>
         /// Creates an empty entity and adds it.
         /// </summary>
         /// <returns>The newly created entity</returns>
         public static Entity CreateEmptyEntity()
         {
-            Entity entity = CommandBuffer.CreateEntity();
+            Entity entity = EntityManager.CreateEntity();
             s_Entities.Add(entity);
 
             return entity;

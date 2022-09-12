@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -18,7 +19,6 @@ namespace ProjectEdit.Scripting
     public partial class ScriptsSystem : SystemBase
     {
         public static Dictionary<Entity, Script> Scripts { get; } = new();
-        private static ref EntityCommandBuffer CommandBuffer => ref EntitiesManager.CommandBuffer;
 
         protected override void OnCreate()
         {
@@ -45,56 +45,58 @@ namespace ProjectEdit.Scripting
 
         protected override void OnStartRunning()
         {
-            CommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
-            var scripts = Scripts;
+            NativeArray<Entity> entities = GetEntityQuery(typeof(ScriptComponent)).ToEntityArray(Allocator.Temp);
 
-            Entities.ForEach((Entity entity, ref ScriptComponent _) =>
+            try
             {
-                if (!scripts.TryGetValue(entity, out Script script))
-                    return;
-                
-                script.StartFunction?.Call();
-
-                DynValue export = script.ScriptHandle.Globals.Get("export");
-                if (export.IsNil())
-                    return;
-
-                foreach (TablePair pair in export.Table.Pairs)
+                foreach (Entity entity in entities)
                 {
-                    Debug.Log($"{pair.Key}:{pair.Value}");
+                    if (!Scripts.TryGetValue(entity, out Script script))
+                        return;
+
+                    script.StartFunction?.Call();
+
+                    DynValue export = script.ScriptHandle.Globals.Get("export");
+                    if (export.IsNil())
+                        return;
+
+                    foreach (TablePair pair in export.Table.Pairs)
+                    {
+                        Debug.Log($"{pair.Key}:{pair.Value}");
+                    }
                 }
-                
-            }).WithoutBurst().Run();
-            
-            if (CommandBuffer.IsEmpty)
-            {
-                CommandBuffer.Dispose();
-                return;
             }
-            
-            CommandBuffer.Playback(EntityManager);
-            CommandBuffer.Dispose();
+            catch (Exception exception)
+            {
+                Debug.LogError($"Script Error: {exception.Message}");
+            }
+            finally
+            {
+                entities.Dispose();
+            }
         }
 
         protected override void OnUpdate()
         {
+            NativeArray<Entity> entities = GetEntityQuery(typeof(ScriptComponent)).ToEntityArray(Allocator.Temp);
             float ts = Time.DeltaTime;
-            CommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
 
-            Entities.ForEach((Entity entity, ref ScriptComponent _) =>
+            try
             {
-                if (Scripts.TryGetValue(entity, out Script script))
-                    script.UpdateFunction?.Call(ts);
-            }).WithoutBurst().Run();
-
-            if (CommandBuffer.IsEmpty)
-            {
-                CommandBuffer.Dispose();
-                return;
+                foreach (Entity entity in entities)
+                {
+                    if (Scripts.TryGetValue(entity, out Script script))
+                        script.UpdateFunction?.Call(ts);
+                }
             }
-            
-            CommandBuffer.Playback(EntityManager);
-            CommandBuffer.Dispose();
+            catch (Exception exception)
+            {
+                Debug.LogError($"Script Error: {exception.Message}");
+            }
+            finally
+            {
+                entities.Dispose();
+            }
         }
 
         public static void AddScript(Entity entity)

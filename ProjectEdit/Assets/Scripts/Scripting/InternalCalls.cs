@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 using Unity.Entities;
@@ -8,6 +7,7 @@ using Unity.Mathematics;
 using MoonSharp.Interpreter;
 
 using ProjectEdit.Entities;
+using UnityEngine;
 
 namespace ProjectEdit.Scripting
 {
@@ -16,7 +16,6 @@ namespace ProjectEdit.Scripting
     {
         private static Dictionary<Entity, Script> Scripts => ScriptsSystem.Scripts;
         private static EntityManager EntityManager => EntitiesManager.EntityManager;
-        private static ref EntityCommandBuffer CommandBuffer => ref EntitiesManager.CommandBuffer;
 
         public static Entity CreateEmptyEntity()
         {
@@ -25,12 +24,13 @@ namespace ProjectEdit.Scripting
 
         public static Entity CreateEntity()
         {
-            return EntitiesManager.ScheduleCreateEntity();
+            return EntitiesManager.CreateEntity();
         }
 
-        public static bool Entity_HasComponent(Entity entity, string componentType)
+        public static bool HasComponent(Entity entity, string componentTypeName)
         {
-            return EntityManager.HasComponent(entity, StringToComponent(componentType));
+            ComponentType componentType = StringToComponent(componentTypeName);
+            return componentType != null && EntityManager.HasComponent(entity, componentType);
         }
 
         public static void AddComponent(Entity entity, string componentName)
@@ -38,10 +38,13 @@ namespace ProjectEdit.Scripting
             switch (componentName)
             {
                 case "Transform":
-                    CommandBuffer.AddComponent<Translation>(entity);
-                    CommandBuffer.AddComponent<Rotation>(entity);
-                    CommandBuffer.AddComponent<Scale>(entity);
-                    CommandBuffer.SetComponent(entity, new Scale { Value = 1 });
+                    EntityManager.AddComponent<Translation>(entity);
+                    EntityManager.AddComponent<Rotation>(entity);
+                    EntityManager.AddComponent<Scale>(entity);
+                    EntityManager.SetComponentData(entity, new Scale { Value = 1 });
+                    break;
+                case "SpriteRenderer":
+                    EntityManager.AddComponent<SpriteRenderer>(entity);
                     break;
             }
             
@@ -69,7 +72,7 @@ namespace ProjectEdit.Scripting
                 (float)(double)vector["z"]
             );
 
-            CommandBuffer.SetComponent(entity, new Translation { Value = value });
+            EntityManager.SetComponentData(entity, new Translation { Value = value });
         }
 
         public static Table GetRotation(Entity entity)
@@ -96,18 +99,45 @@ namespace ProjectEdit.Scripting
                 (float)(double)vector["w"]
             );
 
-            CommandBuffer.SetComponent(entity, new Rotation { Value = value });
+            EntityManager.SetComponentData(entity, new Rotation { Value = value });
         }
 
-        private static Type StringToComponent(string componentName)
-        {
-            switch (componentName)
-            {
-                case "Transform":
-                    return typeof(Translation);
-            }
 
-            return null;
+        public static Table SpriteRenderer_GetColor(Entity entity)
+        {
+            Color value = EntityManager.GetComponentObject<SpriteRenderer>(entity).color;
+            var table = new Table(Scripts[entity].ScriptHandle)
+            {
+                [1] = value.r,
+                [2] = value.g,
+                [3] = value.b,
+                [4] = value.a
+            };
+
+            return table;
+        }
+
+        public static void SpriteRenderer_SetColor(Entity entity, Table vector)
+        {
+            var value = new Color
+            (
+                (float)(double)vector[1],
+                (float)(double)vector[2],
+                (float)(double)vector[3],
+                (float)(double)vector[4]
+            );
+
+            EntityManager.GetComponentObject<SpriteRenderer>(entity).color = value;
+        }
+
+        private static ComponentType StringToComponent(string componentName)
+        {
+            return componentName switch
+            {
+                "Transform" => typeof(Translation),
+                "SpriteRenderer" => typeof(SpriteRenderer),
+                _ => null
+            };
         }
     }
 }
