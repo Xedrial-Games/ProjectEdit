@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 namespace ProjectEdit.LevelsEditor.UI
@@ -26,7 +27,7 @@ namespace ProjectEdit.LevelsEditor.UI
         {
             m_CellData = cellData;
             m_Image.sprite = cellData.Sprite;
-            m_LevelEditor.SelectedTile = m_CellData.Index;
+            m_LevelEditor.SelectedCell = cellData;
         }
 
         public void Select()
@@ -35,7 +36,7 @@ namespace ProjectEdit.LevelsEditor.UI
                 s_SelectedCell.Deselect();
 
             m_Image.color = Color.white;
-            m_LevelEditor.SelectedTile = m_CellData.Index;
+            m_LevelEditor.SelectedCell = m_CellData;
             s_SelectedCell = this;
             Selected = true;
         }

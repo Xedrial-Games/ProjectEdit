@@ -105,6 +105,22 @@ namespace ProjectEdit.Tiles
                 m_TilesInstances[position] = tileInstance;
         }
 
+        public void SetTile(Vector3Int position, Tile tile)
+        {
+            if (!m_Tilemap)
+                m_Tilemap = GetComponentInChildren<Tilemap>();
+
+            m_Tilemap.SetTile(position, tile);
+            
+            int index = m_Tiles.IndexOf(tile);
+            if (index is 0 or -1)
+                return;
+            
+            TileInstance tileInstance = new((Vector2Int)position, index);
+            if (!m_TilesInstances.TryAdd(position, tileInstance))
+                m_TilesInstances[position] = tileInstance;
+        }
+
         public void DeleteTile(Vector3Int position)
         {
             if (!m_Tilemap)

@@ -18,17 +18,15 @@ namespace ProjectEdit.Scripting
 {
     public partial class ScriptsSystem : SystemBase
     {
-        public static Dictionary<Entity, Script> Scripts { get; } = new();
-
         protected override void OnCreate()
         {
-            Scripts.Clear();
             DirectoryInfo modulesDi = new($"{Application.streamingAssetsPath}/LuaScripts/");
             DirectoryInfo directoryInfo = new($"{Application.streamingAssetsPath}/LuaScripts/");
 
-            var scripts = directoryInfo.GetFiles("*.lua", SearchOption.AllDirectories)
-                .ToDictionary(scriptFile => scriptFile.Name,
-                    scriptFile => File.ReadAllText(scriptFile.FullName));
+            FileInfo[] filesInfo = directoryInfo.GetFiles("*.lua", SearchOption.AllDirectories);
+            Dictionary<string, string> scripts = new(filesInfo.Length);
+            foreach (FileInfo file in filesInfo)
+                scripts.Add(file.Name, File.ReadAllText(file.FullName));
 
             MScript.DefaultOptions.ScriptLoader = new UnityAssetsScriptLoader(scripts)
             {
@@ -45,18 +43,14 @@ namespace ProjectEdit.Scripting
 
         protected override void OnStartRunning()
         {
-            NativeArray<Entity> entities = GetEntityQuery(typeof(ScriptComponent)).ToEntityArray(Allocator.Temp);
-
-            try
+            Entities.WithStructuralChanges().WithoutBurst().ForEach((Entity entity, in ScriptComponent scriptComponent) =>
             {
-                foreach (Entity entity in entities)
+                if (!scriptComponent)
+                    InitScript(entity);
+
+                if (scriptComponent)
                 {
-                    if (!Scripts.TryGetValue(entity, out Script script))
-                        return;
-
-                    script.StartFunction?.Call();
-
-                    DynValue export = script.ScriptHandle.Globals.Get("export");
+                    DynValue export = scriptComponent["export"];
                     if (export.IsNil())
                         return;
 
@@ -65,41 +59,25 @@ namespace ProjectEdit.Scripting
                         Debug.Log($"{pair.Key}:{pair.Value}");
                     }
                 }
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError($"Script Error: {exception.Message}");
-            }
-            finally
-            {
-                entities.Dispose();
-            }
+
+                scriptComponent.StartFunction?.Call();
+            }).Run();
         }
 
         protected override void OnUpdate()
         {
-            NativeArray<Entity> entities = GetEntityQuery(typeof(ScriptComponent)).ToEntityArray(Allocator.Temp);
             float ts = Time.DeltaTime;
 
-            try
+            Entities.WithStructuralChanges().WithoutBurst().ForEach((Entity entity, in ScriptComponent scriptComponent) =>
             {
-                foreach (Entity entity in entities)
-                {
-                    if (Scripts.TryGetValue(entity, out Script script))
-                        script.UpdateFunction?.Call(ts);
-                }
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError($"Script Error: {exception.Message}");
-            }
-            finally
-            {
-                entities.Dispose();
-            }
+                if (!scriptComponent)
+                    InitScript(entity);
+
+                scriptComponent.UpdateFunction?.Call(ts);
+            }).Run();
         }
 
-        public static void AddScript(Entity entity)
+        private void InitScript(Entity entity)
         {
             var script = new MScript
             {
@@ -111,8 +89,12 @@ namespace ProjectEdit.Scripting
                 }
             };
 
-            script.DoFile(EntitiesManager.EntityManager.GetComponentData<ScriptComponent>(entity).Script.ToString());
-            Scripts.Add(entity, new Script(script, entity));
+            var scriptComponent = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            
+            script.DoFile(scriptComponent.ScriptName);
+            scriptComponent.Init(script);
+            
+            EntityManager.SetSharedComponentData(entity, scriptComponent);
         }
 
         private static void RegisterTypes()

@@ -6,16 +6,21 @@ namespace ProjectEdit.LevelsEditor
     {
 		private static Vector2 MousePosition => InputSystem.Editor.MousePosition.ReadValue<Vector2>();
 
+		[SerializeField] private Camera m_SelectionCamera;
+		
 		private Plane m_Plane = new(Vector3.back, Vector3.zero);
 
 		private Vector3 m_DragStartPosition;
 		private Vector3 m_DragCurrentPosition;
 
-		private bool m_IsAlt = false;
-		private bool m_IsLPressing = false;
-		private bool m_IsRPressing = false;
+		private bool m_IsAlt;
+		private bool m_IsLPressing;
+		private bool m_IsRPressing;
 
 		private Camera m_Camera;
+
+		private Transform m_CameraTransform;
+		private Transform m_SelectionTransform;
 
         private void Start()
         {
@@ -28,7 +33,7 @@ namespace ProjectEdit.LevelsEditor
 			InputSystem.Editor.Alt.canceled += _ => m_IsAlt = false;
 
 			// Left Mouse Button
-			InputSystem.Editor.LMB.performed += _ =>
+			InputSystem.Editor.Perform.performed += _ =>
 			{
 				m_IsLPressing = true;
 
@@ -38,7 +43,7 @@ namespace ProjectEdit.LevelsEditor
 					m_DragStartPosition = ray.GetPoint(entry);
 			};
 
-			InputSystem.Editor.LMB.canceled += _ => m_IsLPressing = false;
+			InputSystem.Editor.Perform.canceled += _ => m_IsLPressing = false;
 
 			// Right Mouse Button
 			InputSystem.Editor.RMB.performed += _ => m_IsRPressing = true; 
@@ -46,7 +51,9 @@ namespace ProjectEdit.LevelsEditor
 
 			// Mouse Scroll
 			InputSystem.Editor.ScrollDelta.performed += c => MouseScroll(c.ReadValue<float>());
-		}
+			
+			UpdateSelectionCamera();
+        }
 
 		private void Update()
 		{
@@ -63,6 +70,8 @@ namespace ProjectEdit.LevelsEditor
 
 			if (m_IsRPressing && m_IsAlt)
 				MouseScroll(InputSystem.Editor.MouseDelta.ReadValue<float>());
+
+			m_SelectionTransform.position = m_CameraTransform.position;
 		}
 
 		private void MouseScroll(float delta)
@@ -71,6 +80,22 @@ namespace ProjectEdit.LevelsEditor
 	        orthographicSize -= delta;
 	        m_Camera.orthographicSize = orthographicSize;
 	        m_Camera.orthographicSize = Mathf.Clamp(orthographicSize, 1.0f, 12.0f);
+	        m_SelectionCamera.orthographicSize = m_Camera.orthographicSize;
+        }
+
+		private void UpdateSelectionCamera()
+		{
+			RenderTexture rt = m_SelectionCamera.targetTexture;
+			
+			rt.Release();
+			rt.width = Screen.width;
+			rt.height = Screen.height;
+			rt.Create();
+			
+			m_SelectionCamera.aspect = m_Camera.aspect;
+
+			m_CameraTransform = transform;
+			m_SelectionTransform = m_SelectionCamera.transform;
 		}
     }
 }

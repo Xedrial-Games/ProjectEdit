@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using UnityEngine;
 
 using Unity.Entities;
 using Unity.Transforms;
@@ -7,25 +7,17 @@ using Unity.Mathematics;
 using MoonSharp.Interpreter;
 
 using ProjectEdit.Entities;
-using UnityEngine;
 
 namespace ProjectEdit.Scripting
 {
     [MoonSharpUserData]
     internal class InternalCalls
     {
-        private static Dictionary<Entity, Script> Scripts => ScriptsSystem.Scripts;
         private static EntityManager EntityManager => EntitiesManager.EntityManager;
 
-        public static Entity CreateEmptyEntity()
-        {
-            return EntitiesManager.CreateEmptyEntity();
-        }
+        public static Entity CreateEmptyEntity() => EntitiesManager.CreateEmptyEntity();
 
-        public static Entity CreateEntity()
-        {
-            return EntitiesManager.CreateEntity();
-        }
+        public static Entity CreateEntity() => EntityManager.CreateEntity();
 
         public static bool HasComponent(Entity entity, string componentTypeName)
         {
@@ -40,8 +32,7 @@ namespace ProjectEdit.Scripting
                 case "Transform":
                     EntityManager.AddComponent<Translation>(entity);
                     EntityManager.AddComponent<Rotation>(entity);
-                    EntityManager.AddComponent<Scale>(entity);
-                    EntityManager.SetComponentData(entity, new Scale { Value = 1 });
+                    EntityManager.AddComponentData(entity, new NonUniformScale { Value = new float3(1f)});
                     break;
                 case "SpriteRenderer":
                     EntityManager.AddComponent<SpriteRenderer>(entity);
@@ -53,7 +44,9 @@ namespace ProjectEdit.Scripting
         public static Table GetTranslation(Entity entity)
         {
             float3 value = EntityManager.GetComponentData<Translation>(entity).Value;
-            var table = new Table(Scripts[entity].ScriptHandle)
+            
+            var script = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            var table = new Table(script)
             {
                 ["x"] = value.x,
                 ["y"] = value.y,
@@ -78,7 +71,8 @@ namespace ProjectEdit.Scripting
         public static Table GetRotation(Entity entity)
         {
             float4 value = EntityManager.GetComponentData<Rotation>(entity).Value.value;
-            var table = new Table(Scripts[entity].ScriptHandle)
+            var script = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            var table = new Table(script)
             {
                 ["x"] = value.x,
                 ["y"] = value.y,
@@ -106,7 +100,8 @@ namespace ProjectEdit.Scripting
         public static Table SpriteRenderer_GetColor(Entity entity)
         {
             Color value = EntityManager.GetComponentObject<SpriteRenderer>(entity).color;
-            var table = new Table(Scripts[entity].ScriptHandle)
+            var script = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            var table = new Table(script)
             {
                 [1] = value.r,
                 [2] = value.g,

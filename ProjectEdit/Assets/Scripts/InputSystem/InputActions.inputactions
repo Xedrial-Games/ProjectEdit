@@ -213,7 +213,7 @@
             "id": "c9683f7a-dd20-41ba-ae22-f7b413d72f8d",
             "actions": [
                 {
-                    "name": "LMB",
+                    "name": "Perform",
                     "type": "Button",
                     "id": "4a0706c0-d7e5-45b9-aac1-8b49f897fadc",
                     "expectedControlType": "Button",
@@ -310,6 +310,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryTouch",
+                    "type": "Button",
+                    "id": "d5a5c176-cc5d-4504-81ce-2b27c860dfab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PrimaryTouchPosition",
+                    "type": "Value",
+                    "id": "12913300-4a2b-4192-827f-b9c4324a21aa",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SecondaryTouchPosition",
+                    "type": "Value",
+                    "id": "24b015b1-e1ba-425b-825d-1bbfbdc7e478",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -319,8 +346,8 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "LMB",
+                    "groups": "Keyboard",
+                    "action": "Perform",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -328,10 +355,10 @@
                     "name": "",
                     "id": "5a505631-ad50-489f-879e-0e27d82baa2e",
                     "path": "<Touchscreen>/Press",
-                    "interactions": "",
+                    "interactions": "Press(behavior=1)",
                     "processors": "",
-                    "groups": "",
-                    "action": "LMB",
+                    "groups": "Mobile",
+                    "action": "Perform",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -442,6 +469,39 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e547d67f-5a18-4f9c-a91e-b4aee62d134d",
+                    "path": "<Touchscreen>/touch1/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryTouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "741eea08-a0f4-4371-b573-9e5bfa99b54b",
+                    "path": "<Touchscreen>/touch0/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryTouchPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "993c7029-69c0-4080-8144-0fac9ad342c0",
+                    "path": "<Touchscreen>/touch1/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryTouchPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1008,6 +1068,17 @@
                 {
                     "devicePath": "<Gamepad>",
                     "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Mobile",
+            "bindingGroup": "Mobile",
+            "devices": [
+                {
+                    "devicePath": "<Touchscreen>",
+                    "isOptional": true,
                     "isOR": false
                 }
             ]

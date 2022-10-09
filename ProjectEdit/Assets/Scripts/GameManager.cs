@@ -21,6 +21,8 @@ namespace ProjectEdit
 
             DontDestroyOnLoad(this);
 
+            CurrentLevel = Level.Null;
+
             m_Serializer = new Serializer(Serializer.LevelsPath);
             m_OnlineSerializer = new Serializer(Serializer.OnlineLevelsPath);
 

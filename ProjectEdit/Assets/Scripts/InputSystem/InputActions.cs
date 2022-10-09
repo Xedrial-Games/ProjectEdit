@@ -235,7 +235,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
             ""id"": ""c9683f7a-dd20-41ba-ae22-f7b413d72f8d"",
             ""actions"": [
                 {
-                    ""name"": ""LMB"",
+                    ""name"": ""Perform"",
                     ""type"": ""Button"",
                     ""id"": ""4a0706c0-d7e5-45b9-aac1-8b49f897fadc"",
                     ""expectedControlType"": ""Button"",
@@ -332,6 +332,33 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondaryTouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5a5c176-cc5d-4504-81ce-2b27c860dfab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrimaryTouchPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""12913300-4a2b-4192-827f-b9c4324a21aa"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryTouchPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""24b015b1-e1ba-425b-825d-1bbfbdc7e478"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -341,8 +368,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LMB"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Perform"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -350,10 +377,10 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""5a505631-ad50-489f-879e-0e27d82baa2e"",
                     ""path"": ""<Touchscreen>/Press"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=1)"",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LMB"",
+                    ""groups"": ""Mobile"",
+                    ""action"": ""Perform"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -464,6 +491,39 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e547d67f-5a18-4f9c-a91e-b4aee62d134d"",
+                    ""path"": ""<Touchscreen>/touch1/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""741eea08-a0f4-4371-b573-9e5bfa99b54b"",
+                    ""path"": ""<Touchscreen>/touch0/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryTouchPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""993c7029-69c0-4080-8144-0fac9ad342c0"",
+                    ""path"": ""<Touchscreen>/touch1/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryTouchPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1033,6 +1093,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Mobile"",
+            ""bindingGroup"": ""Mobile"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Touchscreen>"",
+                    ""isOptional"": true,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -1045,7 +1116,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Player_MoveY = m_Player.FindAction("MoveY", throwIfNotFound: true);
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
-        m_Editor_LMB = m_Editor.FindAction("LMB", throwIfNotFound: true);
+        m_Editor_Perform = m_Editor.FindAction("Perform", throwIfNotFound: true);
         m_Editor_MousePosition = m_Editor.FindAction("MousePosition", throwIfNotFound: true);
         m_Editor_RMB = m_Editor.FindAction("RMB", throwIfNotFound: true);
         m_Editor_Edit = m_Editor.FindAction("Edit", throwIfNotFound: true);
@@ -1056,6 +1127,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Editor_ScrollDelta = m_Editor.FindAction("ScrollDelta", throwIfNotFound: true);
         m_Editor_Esc = m_Editor.FindAction("Esc", throwIfNotFound: true);
         m_Editor_Inventory = m_Editor.FindAction("Inventory", throwIfNotFound: true);
+        m_Editor_SecondaryTouch = m_Editor.FindAction("SecondaryTouch", throwIfNotFound: true);
+        m_Editor_PrimaryTouchPosition = m_Editor.FindAction("PrimaryTouchPosition", throwIfNotFound: true);
+        m_Editor_SecondaryTouchPosition = m_Editor.FindAction("SecondaryTouchPosition", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1193,7 +1267,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     // Editor
     private readonly InputActionMap m_Editor;
     private IEditorActions m_EditorActionsCallbackInterface;
-    private readonly InputAction m_Editor_LMB;
+    private readonly InputAction m_Editor_Perform;
     private readonly InputAction m_Editor_MousePosition;
     private readonly InputAction m_Editor_RMB;
     private readonly InputAction m_Editor_Edit;
@@ -1204,11 +1278,14 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Editor_ScrollDelta;
     private readonly InputAction m_Editor_Esc;
     private readonly InputAction m_Editor_Inventory;
+    private readonly InputAction m_Editor_SecondaryTouch;
+    private readonly InputAction m_Editor_PrimaryTouchPosition;
+    private readonly InputAction m_Editor_SecondaryTouchPosition;
     public struct EditorActions
     {
         private @InputActions m_Wrapper;
         public EditorActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @LMB => m_Wrapper.m_Editor_LMB;
+        public InputAction @Perform => m_Wrapper.m_Editor_Perform;
         public InputAction @MousePosition => m_Wrapper.m_Editor_MousePosition;
         public InputAction @RMB => m_Wrapper.m_Editor_RMB;
         public InputAction @Edit => m_Wrapper.m_Editor_Edit;
@@ -1219,6 +1296,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @ScrollDelta => m_Wrapper.m_Editor_ScrollDelta;
         public InputAction @Esc => m_Wrapper.m_Editor_Esc;
         public InputAction @Inventory => m_Wrapper.m_Editor_Inventory;
+        public InputAction @SecondaryTouch => m_Wrapper.m_Editor_SecondaryTouch;
+        public InputAction @PrimaryTouchPosition => m_Wrapper.m_Editor_PrimaryTouchPosition;
+        public InputAction @SecondaryTouchPosition => m_Wrapper.m_Editor_SecondaryTouchPosition;
         public InputActionMap Get() { return m_Wrapper.m_Editor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1228,9 +1308,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_EditorActionsCallbackInterface != null)
             {
-                @LMB.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnLMB;
-                @LMB.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnLMB;
-                @LMB.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnLMB;
+                @Perform.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnPerform;
+                @Perform.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnPerform;
+                @Perform.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnPerform;
                 @MousePosition.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMousePosition;
                 @MousePosition.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMousePosition;
                 @MousePosition.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMousePosition;
@@ -1261,13 +1341,22 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Inventory.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnInventory;
+                @SecondaryTouch.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnSecondaryTouch;
+                @SecondaryTouch.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnSecondaryTouch;
+                @SecondaryTouch.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnSecondaryTouch;
+                @PrimaryTouchPosition.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnPrimaryTouchPosition;
+                @PrimaryTouchPosition.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnPrimaryTouchPosition;
+                @PrimaryTouchPosition.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnPrimaryTouchPosition;
+                @SecondaryTouchPosition.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnSecondaryTouchPosition;
+                @SecondaryTouchPosition.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnSecondaryTouchPosition;
+                @SecondaryTouchPosition.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnSecondaryTouchPosition;
             }
             m_Wrapper.m_EditorActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @LMB.started += instance.OnLMB;
-                @LMB.performed += instance.OnLMB;
-                @LMB.canceled += instance.OnLMB;
+                @Perform.started += instance.OnPerform;
+                @Perform.performed += instance.OnPerform;
+                @Perform.canceled += instance.OnPerform;
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
@@ -1298,6 +1387,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
+                @SecondaryTouch.started += instance.OnSecondaryTouch;
+                @SecondaryTouch.performed += instance.OnSecondaryTouch;
+                @SecondaryTouch.canceled += instance.OnSecondaryTouch;
+                @PrimaryTouchPosition.started += instance.OnPrimaryTouchPosition;
+                @PrimaryTouchPosition.performed += instance.OnPrimaryTouchPosition;
+                @PrimaryTouchPosition.canceled += instance.OnPrimaryTouchPosition;
+                @SecondaryTouchPosition.started += instance.OnSecondaryTouchPosition;
+                @SecondaryTouchPosition.performed += instance.OnSecondaryTouchPosition;
+                @SecondaryTouchPosition.canceled += instance.OnSecondaryTouchPosition;
             }
         }
     }
@@ -1433,6 +1531,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_GamepadSchemeIndex];
         }
     }
+    private int m_MobileSchemeIndex = -1;
+    public InputControlScheme MobileScheme
+    {
+        get
+        {
+            if (m_MobileSchemeIndex == -1) m_MobileSchemeIndex = asset.FindControlSchemeIndex("Mobile");
+            return asset.controlSchemes[m_MobileSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -1443,7 +1550,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     }
     public interface IEditorActions
     {
-        void OnLMB(InputAction.CallbackContext context);
+        void OnPerform(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnRMB(InputAction.CallbackContext context);
         void OnEdit(InputAction.CallbackContext context);
@@ -1454,6 +1561,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnScrollDelta(InputAction.CallbackContext context);
         void OnEsc(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+        void OnSecondaryTouch(InputAction.CallbackContext context);
+        void OnPrimaryTouchPosition(InputAction.CallbackContext context);
+        void OnSecondaryTouchPosition(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
