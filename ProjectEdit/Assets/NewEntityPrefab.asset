@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a0e391d28894f4faebebb9462529468, type: 3}
   m_Name: NewEntityPrefab
   m_EditorClassIdentifier: 
-  GameObjectPrefab: {fileID: 1570921907064625661, guid: 2f03d050dcff1a42d8b1929ad1a73582, type: 3}
+  GameObjectPrefab: {fileID: 1570921907064625661, guid: 57afa391da86fdf40a0f97436c004acc, type: 3}
   InventoryIcon: {fileID: 21300000, guid: 7d6c39b96c1b0f04abb9b49537b32dc3, type: 3}

@@ -31,7 +31,7 @@ namespace ProjectEdit.Tiles
 
         public Dictionary<Vector3Int, TileInstance> TilesData { get { return m_TilesInstances; } }
 
-        public List<Tile> Tiles { get => m_Tiles; }
+        public List<Tile> Tiles => m_Tiles;
 
         [SerializeField] private List<Tile> m_Tiles;
 
@@ -113,7 +113,7 @@ namespace ProjectEdit.Tiles
             m_Tilemap.SetTile(position, tile);
             
             int index = m_Tiles.IndexOf(tile);
-            if (index is 0 or -1)
+            if (index == -1)
                 return;
             
             TileInstance tileInstance = new((Vector2Int)position, index);

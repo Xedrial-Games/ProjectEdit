@@ -291,7 +291,7 @@ namespace ProjectEdit.LevelsEditor
     {
         public static Texture2D ToTexture2D(this RenderTexture rt, Texture2D texture2D = null)
         {
-            RenderTexture currentActiveRT = RenderTexture.active;
+            RenderTexture currentActiveRt = RenderTexture.active;
             
             // Set the supplied RenderTexture as the active one
             RenderTexture.active = rt;
@@ -302,7 +302,7 @@ namespace ProjectEdit.LevelsEditor
             texture2D.ReadPixels(new Rect(0, 0, texture2D.width, texture2D.height), 0, 0);
  
             // Restore previously active render texture
-            RenderTexture.active = currentActiveRT;
+            RenderTexture.active = currentActiveRt;
             return texture2D;
         }
     }

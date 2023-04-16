@@ -202,6 +202,8 @@ namespace ProjectEdit
 
         public static TileInstance[] ExtractTiles(string tilesData)
         {
+            byte[] gzipTarFile = Convert.FromBase64String(tilesData);
+            
             List<TileInstance> compressedTilesData = new();
             string[] tiles = tilesData.Split(';');
 
@@ -257,6 +259,27 @@ namespace ProjectEdit
             baseStream.Dispose();
             return result;
         }
+
+        //public static byte[] ExtractTarGzip(byte[] data)
+        //{
+        //    FileInfo[] filesToCmprs = directoryInfo.GetFiles();
+        //    MemoryStream baseStream = new();
+
+        //    using (Stream outputStream = new GZipOutputStream(baseStream))
+        //    {
+        //        using TarArchive tarArchive = TarArchive.CreateOutputTarArchive(outputStream);
+        //        tarArchive.RootPath = directoryInfo.FullName;
+        //        foreach (var fi in filesToCmprs)
+        //        {
+        //            TarEntry entry = TarEntry.CreateEntryFromFile(fi.FullName);
+        //            tarArchive.WriteEntry(entry, true);
+        //        }
+        //    }
+
+        //    byte[] result = baseStream.ToArray();
+        //    baseStream.Dispose();
+        //    return result;
+        //}
 
         public DirectoryInfo ExtractData(byte[] data)
         {

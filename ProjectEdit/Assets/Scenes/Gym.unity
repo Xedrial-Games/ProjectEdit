@@ -2750,6 +2750,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &994062080
 GameObject:
   m_ObjectHideFlags: 0
@@ -5467,10 +5468,6 @@ PrefabInstance:
     - target: {fileID: 2910155763131058032, guid: 6377007af81640a449f68d8a8b48c9e3, type: 3}
       propertyPath: m_Name
       value: PlayerContainer
-      objectReference: {fileID: 0}
-    - target: {fileID: 3480409468920790304, guid: 6377007af81640a449f68d8a8b48c9e3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.6000004
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6377007af81640a449f68d8a8b48c9e3, type: 3}
