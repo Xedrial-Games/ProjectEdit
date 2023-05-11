@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Collections.Generic;
 
 using UnityEngine;
+
 using Unity.Entities;
+using Unity.Collections;
 
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
-using MScript = MoonSharp.Interpreter.Script;
 
-using ProjectEdit.Components;
-using ProjectEdit.Entities;
-using Unity.Collections;
+using MScript = MoonSharp.Interpreter.Script;
 
 namespace ProjectEdit.Scripting
 {
-    public partial class ScriptsSystem : SystemBase
+    public partial class ScriptEngine : SystemBase
     {
         protected override void OnCreate()
         {
@@ -34,50 +31,42 @@ namespace ProjectEdit.Scripting
                 {
                     $"{modulesDi.FullName}/?", $"{modulesDi.FullName}/?.lua"
                 },
-                IgnoreLuaPathGlobal = true
+                IgnoreLuaPathGlobal = true,
             };
             MScript.DefaultOptions.DebugPrint = Debug.Log;
 
             RegisterTypes();
         }
 
-        protected override void OnStartRunning()
-        {
-            Entities.WithStructuralChanges().WithoutBurst().ForEach((Entity entity, in ScriptComponent scriptComponent) =>
-            {
-                if (!scriptComponent)
-                    InitScript(entity);
-
-                if (scriptComponent)
-                {
-                    DynValue export = scriptComponent["export"];
-                    if (export.IsNil())
-                        return;
-
-                    foreach (TablePair pair in export.Table.Pairs)
-                    {
-                        Debug.Log($"{pair.Key}:{pair.Value}");
-                    }
-                }
-
-                scriptComponent.StartFunction?.Call();
-            }).Run();
-        }
-
         protected override void OnUpdate()
         {
-            float ts = Time.DeltaTime;
+            float ts = SystemAPI.Time.DeltaTime;
 
-            Entities.WithStructuralChanges().WithoutBurst().ForEach((Entity entity, in ScriptComponent scriptComponent) =>
+            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            
+            foreach ((RefRO<ScriptComponent> script, Entity entity)
+                     in SystemAPI.Query<RefRO<ScriptComponent>>()
+                         .WithNone<ScriptInstance>()
+                         .WithEntityAccess()
+            )
             {
-                if (!scriptComponent)
-                    InitScript(entity);
+                ScriptInstance scriptInstance = CreateScriptInstance(
+                    entity,
+                    script.ValueRO.ScriptName.ToString()
+                );
+                
+                if (scriptInstance != null)
+                    ecb.AddComponent(entity, scriptInstance);
+            }
+            
+            ecb.Playback(EntityManager);
+            ecb.Dispose();
 
-                scriptComponent.UpdateFunction?.Call(ts);
-            }).Run();
+            foreach (ScriptInstance si in SystemAPI.Query<ScriptInstance>())
+                si.CallUpdate(ts);
         }
 
-        private void InitScript(Entity entity)
+        private ScriptInstance CreateScriptInstance(Entity entity, string scriptName)
         {
             var script = new MScript
             {
@@ -89,12 +78,24 @@ namespace ProjectEdit.Scripting
                 }
             };
 
-            var scriptComponent = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            DynValue scriptValue = script.LoadFile(scriptName);
+            if (scriptValue == null || scriptValue.IsNil())
+                return null;
+
+            script.Call(scriptValue);
             
-            script.DoFile(scriptComponent.ScriptName);
-            scriptComponent.Init(script);
+            var scriptInstance = new ScriptInstance();
+            scriptInstance.Init(script);
             
-            EntityManager.SetSharedComponentData(entity, scriptComponent);
+            DynValue export = script.Globals.Get("export");
+            if (export.IsNotNil())
+            {
+                foreach (TablePair pair in export.Table.Pairs)
+                    Debug.Log($"{pair.Key}:{pair.Value}");
+            }
+
+            scriptInstance.CallStart();
+            return scriptInstance;
         }
 
         private static void RegisterTypes()

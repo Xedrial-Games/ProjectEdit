@@ -1,8 +1,8 @@
 using Unity.Entities;
+using UnityEngine;
 
 namespace ProjectEdit.Entities
 {
-    [GenerateAuthoringComponent]
     public struct RuntimeEntity : IComponentData
     {
     }

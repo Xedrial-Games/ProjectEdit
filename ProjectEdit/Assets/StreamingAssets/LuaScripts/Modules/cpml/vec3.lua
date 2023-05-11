@@ -33,21 +33,15 @@ end
 -- @table vec3
 -- @field zero Empty vector
 -- @field one Unit vector
--- @field right Positive X axis
--- @field left Negative X axis
--- @field up Positive Y axis
--- @field down Negative Y axis
--- @field forword Positive Z axis
--- @field backword Negative Z axis
+-- @field unit_x Vector with 1 on X axis
+-- @field unit_y Vector with 1 on Y axis
+-- @field unit_z Vector with 1 on Z axis
 
-vec3.zero   	= new( 0,  0,  0)
-vec3.one   		= new( 1,  1,  1)
-vec3.right 		= new( 1,  0,  0)
-vec3.left 		= new(-1,  0,  0)
-vec3.up 		= new( 0,  1,  0)
-vec3.down 		= new( 0, -1,  0)
-vec3.forword 	= new( 0,  0,  1)
-vec3.backword 	= new( 0,  0, -1)
+vec3.zero   	= new(0, 0, 0)
+vec3.one   		= new(1, 1, 1)
+vec3.unit_x 	= new(1, 0, 0)
+vec3.unit_y 	= new(0, 1, 0)
+vec3.unit_z 	= new(0, 0, 1)
 
 --- The public constructor.
 -- @param x Can be of three types: </br>

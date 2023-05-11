@@ -4,14 +4,12 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Transforms;
 
-using Xedrial.Rendering;
-using Xedrial.Rendering.Systems;
+using Xedrial.Graphics;
 
 using ProjectEdit.LevelsEditor.Components;
 
 namespace ProjectEdit.LevelsEditor.Systems
 {
-    [UpdateBefore(typeof(SpriteRendererSystem))]
     public partial class SelectionSystem : SystemBase
     {
         private static readonly int s_MainTex = Shader.PropertyToID("_MainTex");
@@ -30,30 +28,42 @@ namespace ProjectEdit.LevelsEditor.Systems
 
         protected override void OnUpdate()
         {
-            Entities.WithoutBurst().WithAny<SelectableEntity>().ForEach((Entity entity, in LocalToWorld matrix, in SpriteRendererComponent spriteRenderer) =>
-            {
-                MaterialPropertyBlock materialPropertyBlock = new();
+            var materialPropertyBlock = new MaterialPropertyBlock();
 
-                materialPropertyBlock.SetTexture(s_MainTex, spriteRenderer.Sprite.texture);
-                materialPropertyBlock.SetColor(s_Color, spriteRenderer.Color);
-                materialPropertyBlock.SetColor(s_SelectionColor, IntToColor(entity.Index));
-
-                Graphics.DrawMesh(
-                    spriteRenderer.Mesh,
-                    matrix.Value,
-                    m_SelectionMaterial,
-                    0,
-                    m_SelectionCamera,
-                    0,
-                    materialPropertyBlock
-                );
-            }).Run();
+            Entities
+                .WithoutBurst()
+                .WithAll<SelectableEntity>()
+                .ForEach((Entity entity, in LocalToWorld matrix,
+                    in SpriteRendererComponent spriteRenderer) =>
+                {
+                    materialPropertyBlock.SetTexture(s_MainTex, spriteRenderer.Sprite.texture);
+                    materialPropertyBlock.SetColor(s_Color, spriteRenderer.Color);
+                    materialPropertyBlock.SetColor(s_SelectionColor, ShortsToColor((short)entity.Index, (short)entity.Version));
+    
+                    Graphics.DrawMesh(
+                        spriteRenderer.Mesh,
+                        matrix.Value,
+                        m_SelectionMaterial,
+                        0,
+                        m_SelectionCamera,
+                        0,
+                        materialPropertyBlock
+                    );
+                }).Run();
         }
 
         private static Color32 IntToColor(int number)
         {
             byte[] intBytes = BitConverter.GetBytes(number);
             return new Color32(intBytes[0], intBytes[1], intBytes[2], intBytes[3]);
+        }
+
+        private static Color32 ShortsToColor(short a, short b)
+        {
+            byte[] aBytes = BitConverter.GetBytes(a);
+            byte[] bBytes = BitConverter.GetBytes(b);
+            
+            return new Color32(aBytes[0], aBytes[1], bBytes[0], bBytes[1]);
         }
     }
 }

@@ -1,8 +1,8 @@
 using Unity.Entities;
+using UnityEngine;
 
 namespace ProjectEdit.Player
 {
-    [GenerateAuthoringComponent]
     public struct PlayerTag : IComponentData
     {
     }

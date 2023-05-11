@@ -47,6 +47,8 @@ namespace ProjectEdit.LevelsEditor
         [Header("Selection Properties")]
         [SerializeField] private Camera m_SelectionCamera;
         [SerializeField] private Material m_SelectionMaterial;
+        [SerializeField] private RenderTexture m_IndexTexture;
+        [SerializeField] private RenderTexture m_VersionTexture;
         
         private Vector3Int CellPosition
         {
@@ -69,6 +71,7 @@ namespace ProjectEdit.LevelsEditor
         private Camera m_Camera;
         private Grid m_Grid;
         private TileCreator m_TileCreator;
+        private UIManager m_UIManager;
         
         private Texture2D m_SelectionTexture;
 
@@ -96,11 +99,22 @@ namespace ProjectEdit.LevelsEditor
                     {
                         if (SelectedCell.Type == CellType.Entity)
                         {
-                            Entity entity = EntitiesManager.EntityManager.Instantiate((Entity)SelectedCell.Data);
-                            EntitiesManager.EntityManager.SetComponentData(entity, new Translation
+                            EntityManager em = EntitiesManager.EntityManager;
+                            
+                            Entity entity = em.Instantiate((Entity)SelectedCell.Data);
+                            if (em.HasComponent<LocalTransform>(entity))
                             {
-                                Value = CellWorldPosition
-                            });
+                                var trans = em.GetComponentData<LocalTransform>(entity);
+                                trans.Position = CellWorldPosition;
+                                em.SetComponentData(entity, trans);
+                            }
+                            
+                            if (em.HasComponent<LocalToWorld>(entity))
+                            {
+                                var trans = em.GetComponentData<LocalToWorld>(entity);
+                                trans.Value.c3.xyz = CellWorldPosition;
+                                em.SetComponentData(entity, trans);
+                            }
                         }
 
                         break;
@@ -113,17 +127,16 @@ namespace ProjectEdit.LevelsEditor
 
                         Vector2 pos = Input.mousePosition;
                         Color32 selectionColor = m_SelectionTexture.GetPixel((int)pos.x, (int)pos.y);
-                        int index = BitConverter.ToInt32(selectionColor.ToByteArray());
+                        byte[] bytes = selectionColor.ToByteArray();
+                        int index = BitConverter.ToInt16(new ReadOnlySpan<byte>(new []{bytes[0], bytes[1]}));
+                        int version = BitConverter.ToInt16(new ReadOnlySpan<byte>(new []{bytes[2], bytes[3]}));
 
-                        if (index >= 1)
+                        Entity selectedEntity = new()
                         {
-                            Entity selectedEntity = new()
-                            {
-                                Index = index,
-                                Version = 1
-                            };
-                            print($"Index: {index}, Valid: {EntitiesManager.EntityManager.Exists(selectedEntity)}");
-                        }
+                            Index = index,
+                            Version = version
+                        };
+                        print($"Index: {index}, Valid: {EntitiesManager.EntityManager.Exists(selectedEntity)}");
 
                         break;
                     }
@@ -228,6 +241,7 @@ namespace ProjectEdit.LevelsEditor
             m_ToolText.text = string.Empty;
             
             m_Camera = Camera.main;
+            m_SelectionCamera.SetReplacementShader(m_SelectionMaterial.shader, string.Empty);
 
             m_TileCreator = GetComponent<TileCreator>();
             m_Grid = GetComponentInChildren<Grid>();
@@ -235,6 +249,8 @@ namespace ProjectEdit.LevelsEditor
 
         private void Start()
         {
+            m_UIManager = UIManager.Instance;
+
             Debug.Assert(m_ToolText, "Tool text hasn't been assigned", gameObject);
             
             //foreach (string path in Directory.GetFiles($"{Path}/Textures"))

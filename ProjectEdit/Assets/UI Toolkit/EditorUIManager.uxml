@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="InspectorPanel" src="project://database/Assets/UI%20Toolkit/InspectorPanel.uxml?fileID=9197481963319205126&amp;guid=7158938677cca1e4bac489fe47d781ae&amp;type=3#InspectorPanel" />
+    <Style src="project://database/Assets/UI%20Toolkit/EditorUI.uss?fileID=7433441132597879392&amp;guid=c5ce7386373a28642af9d7c50eab6a11&amp;type=3#EditorUI" />
+    <ProjectEdit.UI.EditorUIManager name="EditorUIManager" class="screen">
+        <ui:Instance template="InspectorPanel" name="InspectorPanel" style="flex-grow: 1;" />
+    </ProjectEdit.UI.EditorUIManager>
+</ui:UXML>

@@ -10,12 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1570921907064625657}
   - component: {fileID: -1061817964477528559}
-  - component: {fileID: -6293270549442749350}
-  - component: {fileID: -3496630592689722979}
-  - component: {fileID: -8382009709575920427}
-  - component: {fileID: 7175968571781772634}
-  - component: {fileID: 8242358978908840210}
-  - component: {fileID: -696243939003391372}
+  - component: {fileID: 3892342707214993356}
+  - component: {fileID: -6404855993963811876}
+  - component: {fileID: 1750548413514345628}
   m_Layer: 0
   m_Name: EntityPrefab
   m_TagString: Untagged
@@ -90,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-6293270549442749350
+--- !u!114 &3892342707214993356
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,20 +96,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1570921907064625661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1871226a22bace745aa2a07349fce37b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4247eef7faa34058a2a39b25e8eecfd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset:
-    x: 0
-    y: 0
-  m_Size:
-    x: 0.5
-    y: 0.5
-  m_Density: 1
-  m_Friction: 0.5
-  m_Restitution: 0
-  m_IsSensor: 1
---- !u!114 &-3496630592689722979
+--- !u!114 &-6404855993963811876
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,11 +108,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1570921907064625661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 775239d3f0538154d89a0f55acc14f82, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bdef312bc884f998fc75efd5cdac67c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BodyType: 0
---- !u!114 &-8382009709575920427
+  m_Value: {fileID: 21300000, guid: 7d6c39b96c1b0f04abb9b49537b32dc3, type: 3}
+--- !u!114 &1750548413514345628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,44 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1570921907064625661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 581c3376ca2b6f447972e18d77bb4059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Mesh: {fileID: 0}
---- !u!114 &7175968571781772634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1570921907064625661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7771d3c9734145cfbad358c4d5f099ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8242358978908840210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1570921907064625661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be7675aa71f0422db163311bc470a047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-696243939003391372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1570921907064625661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 052c35de8abab1402835861e8dd8f25d, type: 3}
+  m_Script: {fileID: 11500000, guid: d468475b2a00495e926641421de33025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ScriptName: MoveSquare.lua

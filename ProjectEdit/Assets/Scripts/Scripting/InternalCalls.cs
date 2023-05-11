@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using MoonSharp.Interpreter;
 
 using ProjectEdit.Entities;
+using Xedrial.Graphics;
 
 namespace ProjectEdit.Scripting
 {
@@ -21,8 +22,8 @@ namespace ProjectEdit.Scripting
 
         public static bool HasComponent(Entity entity, string componentTypeName)
         {
-            ComponentType componentType = StringToComponent(componentTypeName);
-            return componentType != null && EntityManager.HasComponent(entity, componentType);
+            return StringToComponent(componentTypeName, out ComponentType componentType) 
+                   && EntityManager.HasComponent(entity, componentType);
         }
 
         public static void AddComponent(Entity entity, string componentName)
@@ -30,22 +31,19 @@ namespace ProjectEdit.Scripting
             switch (componentName)
             {
                 case "Transform":
-                    EntityManager.AddComponent<Translation>(entity);
-                    EntityManager.AddComponent<Rotation>(entity);
-                    EntityManager.AddComponentData(entity, new NonUniformScale { Value = new float3(1f)});
+                    EntityManager.AddComponent<LocalTransform>(entity);
                     break;
                 case "SpriteRenderer":
-                    EntityManager.AddComponent<SpriteRenderer>(entity);
+                    EntityManager.AddComponent<SpriteRendererComponent>(entity);
                     break;
             }
-            
-        }
+        } 
 
         public static Table GetTranslation(Entity entity)
         {
-            float3 value = EntityManager.GetComponentData<Translation>(entity).Value;
+            float3 value = EntityManager.GetComponentData<LocalTransform>(entity).Position;
             
-            var script = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            var script = EntityManager.GetComponentData<ScriptInstance>(entity);
             var table = new Table(script)
             {
                 ["x"] = value.x,
@@ -65,13 +63,15 @@ namespace ProjectEdit.Scripting
                 (float)(double)vector["z"]
             );
 
-            EntityManager.SetComponentData(entity, new Translation { Value = value });
+            var transform = EntityManager.GetComponentData<LocalTransform>(entity);
+            transform.Position = value;
+            EntityManager.SetComponentData(entity, transform);
         }
 
         public static Table GetRotation(Entity entity)
         {
-            float4 value = EntityManager.GetComponentData<Rotation>(entity).Value.value;
-            var script = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            float4 value = EntityManager.GetComponentData<LocalTransform>(entity).Rotation.value;
+            var script = EntityManager.GetComponentData<ScriptInstance>(entity);
             var table = new Table(script)
             {
                 ["x"] = value.x,
@@ -93,14 +93,17 @@ namespace ProjectEdit.Scripting
                 (float)(double)vector["w"]
             );
 
-            EntityManager.SetComponentData(entity, new Rotation { Value = value });
+            var transform = EntityManager.GetComponentData<LocalTransform>(entity);
+            transform.Rotation = value;
+            EntityManager.SetComponentData(entity, transform);
         }
 
 
         public static Table SpriteRenderer_GetColor(Entity entity)
         {
-            Color value = EntityManager.GetComponentObject<SpriteRenderer>(entity).color;
-            var script = EntityManager.GetSharedComponentData<ScriptComponent>(entity);
+            Color value = EntityManager.GetComponentObject<SpriteRendererComponent>(entity).Color;
+            var script = EntityManager.GetComponentData<ScriptInstance>(entity);
+            
             var table = new Table(script)
             {
                 [1] = value.r,
@@ -122,17 +125,33 @@ namespace ProjectEdit.Scripting
                 (float)(double)vector[4]
             );
 
-            EntityManager.GetComponentObject<SpriteRenderer>(entity).color = value;
+            EntityManager.GetComponentObject<SpriteRendererComponent>(entity).Color = value;
         }
 
-        private static ComponentType StringToComponent(string componentName)
+        private struct NullComponent : IComponentData
         {
-            return componentName switch
+        }
+        
+        private static bool StringToComponent(string componentName, out ComponentType componentType)
+        {
+            switch (componentName) 
             {
-                "Transform" => typeof(Translation),
-                "SpriteRenderer" => typeof(SpriteRenderer),
-                _ => null
-            };
+                case "Transform":
+                {
+                    componentType = typeof(LocalToWorld);
+                    return true;
+                }
+                case "SpriteRenderer":
+                {
+                    componentType = typeof(SpriteRendererComponent);
+                    return true;
+                }
+                default:
+                {
+                    componentType = default;
+                    return false;
+                }
+            }
         }
     }
 }

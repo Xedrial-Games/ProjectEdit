@@ -4,10 +4,7 @@ export = {
 	rotationSpeed = 5
 };
 
-local rotation = 0;
-
 function Update(ts)
 	-- Rotation --
-	rotation = rotation + export.rotationSpeed * ts;
-	transform.rotation = quat.rotate(rotation, vec3.backword);
+	transform.rotation = transform.rotation * quat.rotate(export.rotationSpeed * ts, -vec3.unit_z);
 end
